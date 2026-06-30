@@ -8,14 +8,14 @@ configs.
 
 ## Building a self-hosted NetDevOps platform
 
-Three pieces, designed to compose rather than stand alone:
+Four pieces, designed to compose rather than stand alone:
 
 | Stage | Project | Status |
 |---|---|---|
 | 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | v1.1, feature-complete |
-| Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
-| 2. Capture behavior | Syslog event pipeline | not started |
-| 3. Diagnose it | An agent that composes stages 1 and the knowledge base via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
+| 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
+| 3. Capture behavior | Syslog event pipeline | not started |
+| 4. Diagnose it | An agent that composes stages 1 and 2 via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
 
 ## CCNP ENCOR (350-401) — studying in public
 
