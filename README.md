@@ -6,12 +6,22 @@ configs.
 
 [LinkedIn](https://www.linkedin.com/in/stefan-c-reed/)
 
-## What I'm working on
+## Building a self-hosted NetDevOps platform
 
-**CCNP ENCOR (350-401)** — studying in public. Notes get turned into installable
-[Claude Code](https://claude.com/claude-code) skills as I go, not just static docs —
-each topic ships with real IOS-XE config patterns, verification commands, and a
-troubleshooting checklist.
+Three pieces, designed to compose rather than stand alone:
+
+| Stage | Project | Status |
+|---|---|---|
+| 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | v1.1, feature-complete |
+| Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
+| 2. Capture behavior | Syslog event pipeline | not started |
+| 3. Diagnose it | An agent that composes stages 1 and the knowledge base via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
+
+## CCNP ENCOR (350-401) — studying in public
+
+Notes get turned into installable [Claude Code](https://claude.com/claude-code)
+skills as I go, not just static docs — each topic ships with real IOS-XE config
+patterns, verification commands, and a troubleshooting checklist.
 
 → Full roadmap and progress: [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills)
 
@@ -19,14 +29,13 @@ troubleshooting checklist.
 |---|---|
 | Architecture (15%) | Not started |
 | Virtualization (10%) | Not started |
-| Infrastructure (30%) | In progress — VLANs, L2/L3 forwarding, STP/RSTP, STP hardening |
+| Infrastructure (30%) | In progress — L2/L3 forwarding, STP/RSTP/MST, EtherChannel, IP routing, EIGRP, OSPF (incl. multi-area + OSPFv3) |
 | Network Assurance (10%) | Not started |
 | Security (20%) | Not started |
 | Automation (15%) | Not started |
 
 ## Other projects
 
-- [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — NetDevOps portfolio piece
 - [network-observability](https://github.com/stefcharreed/network-observability)
 
 ## How I work
