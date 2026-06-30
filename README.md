@@ -8,6 +8,10 @@ configs.
 
 ## Building a self-hosted NetDevOps platform
 
+*Very much in early development — one piece is feature-complete, the rest are
+in progress or just planned. Posted here so you can watch it take shape, not
+as a finished product.*
+
 Four pieces, designed to compose rather than stand alone:
 
 | Stage | Project | Status |
