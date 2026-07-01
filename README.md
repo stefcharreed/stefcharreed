@@ -8,18 +8,19 @@ configs.
 
 ## Building a self-hosted NetDevOps platform
 
-*Very much in early development — one piece is feature-complete, the rest are
-in progress or just planned. Posted here so you can watch it take shape, not
-as a finished product.*
+*In active development — one piece is shipped and hardware-validated, one is
+the current focus, the rest are in progress or planned. Posted here so you
+can watch it take shape, not as a finished product.*
 
-Four pieces, designed to compose rather than stand alone:
+Five pieces, designed to compose rather than stand alone:
 
 | Stage | Project | Status |
 |---|---|---|
-| 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | v1.1, feature-complete |
+| 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | **Shipped — validated against physical Cisco gear** (live SSH pull, human-gated baseline promotion, real drift correctly detected) |
 | 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
-| 3. Capture behavior | Syslog event pipeline | not started |
-| 4. Diagnose it | An agent that composes stages 1 and 2 via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
+| 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with config-audit's drift surfaced as its own dashboard panel and alert | **current focus** — Dockerized, CI-validated, drift integration shipped; live-hardware SNMP validation next |
+| 4. Capture logs | Syslog event pipeline | not started |
+| 5. Diagnose it | An agent that composes stages 1–3 via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
 
 ## CCNP ENCOR (350-401) — studying in public
 
@@ -37,10 +38,6 @@ patterns, verification commands, and a troubleshooting checklist.
 | Network Assurance (10%) | Not started |
 | Security (20%) | Not started |
 | Automation (15%) | Not started |
-
-## Other projects
-
-- [network-observability](https://github.com/stefcharreed/network-observability)
 
 ## How I work
 
