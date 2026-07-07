@@ -2,7 +2,8 @@
 
 Network engineer (NOC tech → network engineer), moving deeper into network security
 and automation (NetDevOps). I build tooling around the networks I run, not just
-configs.
+configs. Current direction: firewall security operations — extending the drift-audit
+pattern below from Cisco routing/switching to Palo Alto firewall policy.
 
 [LinkedIn](https://www.linkedin.com/in/stefan-c-reed/)
 
@@ -17,6 +18,7 @@ Five pieces, designed to compose rather than stand alone:
 | Stage | Project | Status |
 |---|---|---|
 | 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | **Shipped — validated against physical Cisco gear** (live SSH pull, human-gated baseline promotion, real drift correctly detected) |
+| 1b. Detect *firewall policy* drift | [paloalto-config-audit](https://github.com/stefcharreed/paloalto-config-audit) — the stage-1 pattern applied to Palo Alto: security-rule drift via the PAN-OS/Panorama API, with a written [gap analysis](https://github.com/stefcharreed/paloalto-config-audit/blob/main/COMPARISON.md) holding it to stage 1's bar | in development — offline pipeline complete (46 tests, CI on 3.10–3.12, threat model written); real-firewall validation is the gate before "shipped" |
 | 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
 | 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with config-audit's drift surfaced as its own dashboard panel and alert | **current focus** — Dockerized, CI-validated, drift integration shipped; live-hardware SNMP validation next |
 | 4. Capture logs | Syslog event pipeline | not started |
