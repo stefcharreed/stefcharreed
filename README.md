@@ -2,47 +2,117 @@
 
 Network engineer (NOC tech → network engineer), moving deeper into network security
 and automation (NetDevOps). I build tooling around the networks I run, not just
-configs. Current direction: firewall security operations — extending the drift-audit
-pattern below from Cisco routing/switching to Palo Alto firewall policy.
+configs — and lately, tooling that turns what I'm studying into something a machine
+can actually use.
+
+Current focus: a CCNP ENCOR knowledge base built as structured, queryable skill
+files, and two private tools built on top of it. Working direction is firewall and
+security operations.
 
 [LinkedIn](https://www.linkedin.com/in/stefan-c-reed/)
 
-## Building a self-hosted NetDevOps platform
-
-*In active development — one piece is shipped and hardware-validated, one is
-the current focus, the rest are in progress or planned. Posted here so you
-can watch it take shape, not as a finished product.*
-
-Five pieces, designed to compose rather than stand alone:
-
-| Stage | Project | Status |
-|---|---|---|
-| 1. Detect drift | [netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit) — pulls running-configs over SSH, tracks per-device drift in git, exposes it via an MCP server | **Shipped — validated against physical Cisco gear** (live SSH pull, human-gated baseline promotion, real drift correctly detected) |
-| 1b. Detect *firewall policy* drift | [paloalto-config-audit](https://github.com/stefcharreed/paloalto-config-audit) — the stage-1 pattern applied to Palo Alto: security-rule drift via the PAN-OS/Panorama API, with a written [gap analysis](https://github.com/stefcharreed/paloalto-config-audit/blob/main/COMPARISON.md) holding it to stage 1's bar | in development — offline pipeline complete (46 tests, CI on 3.10–3.12, threat model written); real-firewall validation is the gate before "shipped" |
-| 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — CCNP ENCOR study notes, structured as reusable, AI-queryable skill files | in progress |
-| 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with config-audit's drift surfaced as its own dashboard panel and alert | **current focus** — Dockerized, CI-validated, drift integration shipped; live-hardware SNMP validation next |
-| 4. Capture logs | Syslog event pipeline | not started |
-| 5. Diagnose it | An agent that composes stages 1–3 via MCP to reason about real network problems, not just static topics | in progress, private repo — [ask me about it](https://www.linkedin.com/in/stefan-c-reed/) |
+---
 
 ## CCNP ENCOR (350-401) — studying in public
 
-Notes get turned into installable [Claude Code](https://claude.com/claude-code)
-skills as I go, not just static docs — each topic ships with real IOS-XE config
-patterns, verification commands, and a troubleshooting checklist.
+**20 topics shipped so far**, and they aren't notes. Each one is an installable
+[Claude Code](https://claude.com/claude-code) skill that loads only when it's
+relevant to what you're actually doing — and each ships with the same structure:
 
-→ Full roadmap and progress: [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills)
+- **Config Patterns** — real IOS-XE, no pseudocode
+- **Design Baseline** — best-practice defaults with **a named, real source per row**.
+  No source, no row. Every row also carries *legitimate reasons to deviate*, because
+  real networks deviate from best practice for good and bad reasons — so a deviation
+  is a **question** for the operator, never automatically a finding
+- **Intent Questions** — "what is this supposed to be doing here?" answered *before*
+  any `show` command
+- **Troubleshooting Checklist** — ordered, and step 0 is always intent vs. observed
+- **Common Pitfalls** — the things that actually cost people hours
 
-| Domain (ENCOR weight) | Status |
+The Design Baseline and Intent Questions sections exist because working engineers
+told me the first version was missing them. That feedback is credited in the repo.
+
+→ **[ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills)** — full
+roadmap, and the `/ccnp-note` command that generates each skill from raw study notes
+
+| Domain (ENCOR weight) | Progress |
 |---|---|
-| Architecture (15%) | Not started |
-| Virtualization (10%) | Not started |
-| Infrastructure (30%) | In progress — L2/L3 forwarding, STP/RSTP/MST, EtherChannel, IP routing, EIGRP, OSPF (incl. multi-area + OSPFv3) |
-| Network Assurance (10%) | Not started |
-| Security (20%) | Not started |
-| Automation (15%) | Not started |
+| Architecture (15%) | not started |
+| **Virtualization (10%)** | Overlay Tunnels — GRE, IPsec (IKEv1/IKEv2), VTI, LISP, VXLAN |
+| **Infrastructure (30%)** | **19 topics** — L2/L3 forwarding, STP/RSTP/MST + protection, EtherChannel, IP routing, EIGRP, OSPF (multi-area + OSPFv3), BGP (+ advanced), multicast, QoS, IP services (NTP/PTP/FHRP/NAT), wireless RF & modulation |
+| Network Assurance (10%) | next up — SNMP, syslog, NetFlow, IP SLA |
+| Security (20%) | next up — ACLs, first-hop security, AAA |
+| Automation (15%) | not started |
+
+---
+
+## Two private projects built on that catalog
+
+*Both are private — they involve real device interaction patterns and lab state. If
+either sounds interesting, **[reach out and ask me about it](https://www.linkedin.com/in/stefan-c-reed/)**;
+I'm happy to walk through the architecture.*
+
+### A multi-skill network troubleshooting agent
+
+Composes the skill catalog with the drift auditor below, over MCP, to reason about
+real problems across several topic areas at once — the way an engineer actually
+troubleshoots, rather than one isolated topic at a time.
+
+The design decision I care about most: **retrieval, not reasoning.** The agent's job
+is to surface the right structured knowledge and walk a real checklist — not to
+freelance an answer. And because the interface is MCP rather than a vendor SDK, the
+"head" is swappable by construction: any MCP-capable client can drive it.
+
+### A CCNP lab trainer that grades me on my own gear
+
+Pick a topic, get a generated objective, build it on real equipment, get graded.
+The parts that made it interesting to design:
+
+- **Two grading axes, because one isn't enough.** Verification output answers *did it
+  converge?*; config comparison answers *is it complete?* A perfect-looking config
+  that never converged should fail, and so should a working hack. The config half is
+  **scoped to the objective's own lines** — grading OSPF must never fail you over an
+  unrelated NTP setting.
+- **An AI answer key that's safe to be graded by.** A generator proposes the target
+  config, an **independent reviewer agent checks it against the cited skill catalog**,
+  and only then do I approve it. An unverified AI answer key is worse than no tool —
+  it teaches you the wrong thing with confidence, and as the learner you're the least
+  able to catch it.
+- **Graduated hints.** Level 1 points you back at the intent questions and *cannot*
+  reveal the answer. You have to spend hints to get to the diff.
+- **Traffic probes for objectives no `show` command can prove.** `show ip nat
+  translations` is empty until traffic flows; an ACL only proves itself on a denial —
+  so that objective's passing condition is a probe that **fails**, plus a second probe
+  that must still succeed, which catches a lazy deny-everything answer.
+- **Infrastructure noise can't poison the record.** If a lab host is down, the attempt
+  reports *inconclusive* — never a failure against the log of what I actually need to
+  study.
+
+---
+
+## The wider platform
+
+*In active development — one piece is shipped and hardware-validated, the rest are in
+progress or planned. Posted so you can watch it take shape, not as a finished product.*
+
+| Stage | Project | Status |
+|---|---|---|
+| 1. Detect drift | **[netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit)** — pulls running-configs over SSH, tracks per-device drift in git, exposes it over MCP with human-gated baseline promotion | **Shipped — validated against physical Cisco gear** |
+| 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — see above | active |
+| 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with drift surfaced as its own dashboard panel and alert | Dockerized and CI-validated; live SNMP validation next |
+| 4. Capture logs | Syslog event pipeline | not started |
+| 5. Diagnose it | The troubleshooting agent above | private — [ask me](https://www.linkedin.com/in/stefan-c-reed/) |
+| — | [paloalto-config-audit](https://github.com/stefcharreed/paloalto-config-audit) — the stage-1 drift pattern applied to PAN-OS/Panorama security rules | offline pipeline complete; **on the back burner** pending real-firewall validation |
+
+---
 
 ## How I work
 
-I use Claude Code as part of my study and build process — turning raw notes and lab
-output into structured, reusable references instead of one-off documents. The
-`ccnp-encor-skills` repo is the clearest example of that in practice.
+I use Claude Code as part of how I study and build — turning raw notes and lab output
+into structured, reusable references instead of one-off documents, then building tools
+that consume those references. `ccnp-encor-skills` is the clearest public example, and
+the lab trainer above is what happens when you point that same knowledge base back at
+yourself and let it grade you.
+
+A rule I hold everything to: **fixture-tested and gear-validated are not the same
+claim.** Every repo says which one it is.
