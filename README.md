@@ -15,7 +15,7 @@ security operations.
 
 ## CCNP ENCOR (350-401) — studying in public
 
-**20 topics shipped so far**, and they aren't notes. Each one is an installable
+**27 topics shipped so far**, and they aren't notes. Each one is an installable
 [Claude Code](https://claude.com/claude-code) skill that loads only when it's
 relevant to what you're actually doing — and each ships with the same structure:
 
@@ -37,11 +37,11 @@ roadmap, and the `/ccnp-note` command that generates each skill from raw study n
 
 | Domain (ENCOR weight) | Progress |
 |---|---|
-| Architecture (15%) | not started |
+| **Architecture (15%)** | **2 topics** — hierarchical campus design (access/distribution/core, network blocks, HA/SSO/NSF), and fabric: SD-Access (LISP/VXLAN/TrustSec, DNA Center layers) + SD-WAN (vManage/vSmart/vBond, OMP, AAR, Cloud OnRamp) |
 | **Virtualization (10%)** | Overlay Tunnels — GRE, IPsec (IKEv1/IKEv2), VTI, LISP, VXLAN |
-| **Infrastructure (30%)** | **19 topics** — L2/L3 forwarding, STP/RSTP/MST + protection, EtherChannel, IP routing, EIGRP, OSPF (multi-area + OSPFv3), BGP (+ advanced), multicast, QoS, IP services (NTP/PTP/FHRP/NAT), wireless RF & modulation |
-| Network Assurance (10%) | next up — SNMP, syslog, NetFlow, IP SLA |
-| Security (20%) | next up — ACLs, first-hop security, AAA |
+| **Infrastructure (30%)** | **22 topics** — L2/L3 forwarding, STP/RSTP/MST + protection, EtherChannel, IP routing, EIGRP, OSPF (multi-area + OSPFv3), BGP (+ advanced), multicast, QoS, IP services (NTP/PTP/FHRP/NAT), and the full wireless block: RF & modulation, infrastructure/CAPWAP, roaming & location services, troubleshooting |
+| **Network Assurance (10%)** | **Covered** — ping/traceroute/debug discipline, SNMP (MIBs, OIDs, traps), syslog, NetFlow & Flexible NetFlow, SPAN/RSPAN/ERSPAN, IP SLA, Catalyst Center Assurance |
+| Security (20%) | **1 topic** — wireless client authentication (WPA3/SAE, EAP & 802.1x, the four-way handshake, WebAuth). Next up: ACLs, first-hop security, AAA |
 | Automation (15%) | not started |
 
 ---
@@ -102,7 +102,8 @@ progress or planned. Posted so you can watch it take shape, not as a finished pr
 | 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with drift surfaced as its own dashboard panel and alert | Dockerized and CI-validated; live SNMP validation next |
 | 4. Capture logs | Syslog event pipeline | not started |
 | 5. Diagnose it | The troubleshooting agent above | private — [ask me](https://www.linkedin.com/in/stefan-c-reed/) |
-| — | [paloalto-config-audit](https://github.com/stefcharreed/paloalto-config-audit) — the stage-1 drift pattern applied to PAN-OS/Panorama security rules | offline pipeline complete; **on the back burner** pending real-firewall validation |
+| — | batfish-compliance-audit — runs the fleet's collected baselines through [Batfish](https://www.batfish.org/) to ask a different question from drift: not "did this device change," but "does the *intended* config satisfy policy at all" | v1 build complete; CLI exercised end-to-end against a real local Batfish container, against sanitized fixtures rather than real fleet baselines. **Not yet public** |
+| — | [paloalto-config-audit](https://github.com/stefcharreed/paloalto-config-audit) — the stage-1 drift pattern applied to PAN-OS/Panorama security rules | offline pipeline complete — 95-test suite, CI on Python 3.10–3.12, threat model and a real-firewall runbook written; **on the back burner** pending that validation session |
 
 ---
 
