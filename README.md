@@ -5,21 +5,23 @@ and automation (NetDevOps). I build tooling around the networks I run, not just
 configs — and lately, tooling that turns what I'm studying into something a machine
 can actually use.
 
-Current focus: a CCNP ENCOR knowledge base built as structured, queryable skill
-files, and two private tools built on top of it. Working direction is firewall and
-security operations.
+Current focus: a CCNP knowledge base built as structured, queryable skill files —
+**ENCOR is complete and ENARSI is underway** — plus two private tools built on top of
+it. Working direction is firewall and security operations.
 
 [LinkedIn](https://www.linkedin.com/in/stefan-c-reed/)
 
 ---
 
-## CCNP ENCOR (350-401) — studying in public
+## CCNP — studying in public
 
-**27 topics shipped so far**, and they aren't notes. Each one is an installable
+**ENCOR 350-401 is complete: 32 topics, all six blueprint domains, the whole Official
+Cert Guide.** They aren't notes. Each one is an installable
 [Claude Code](https://claude.com/claude-code) skill that loads only when it's
 relevant to what you're actually doing — and each ships with the same structure:
 
-- **Config Patterns** — real IOS-XE, no pseudocode
+- **Config Patterns** — real IOS-XE, no pseudocode, and each block says whether it was
+  transcribed from the source or written to fill a gap the source left
 - **Design Baseline** — best-practice defaults with **a named, real source per row**.
   No source, no row. Every row also carries *legitimate reasons to deviate*, because
   real networks deviate from best practice for good and bad reasons — so a deviation
@@ -28,21 +30,42 @@ relevant to what you're actually doing — and each ships with the same structur
   any `show` command
 - **Troubleshooting Checklist** — ordered, and step 0 is always intent vs. observed
 - **Common Pitfalls** — the things that actually cost people hours
+- **Exam Preparation Tasks** — the chapter's own Key Topics table, mapped row by row to
+  where the skill covers it. **A row that can't be mapped is marked `gap`**, so the map
+  doubles as a coverage audit of the skill itself rather than a claim of completeness
 
 The Design Baseline and Intent Questions sections exist because working engineers
 told me the first version was missing them. That feedback is credited in the repo.
 
-→ **[ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills)** — full
-roadmap, and the `/ccnp-note` command that generates each skill from raw study notes
+→ **[ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills)** — both
+catalogs, the full roadmap, and the `/ccnp-note` and `/enarsi-note` commands that
+generate each skill from raw study notes
 
-| Domain (ENCOR weight) | Progress |
+### ENCOR 350-401 — complete
+
+| Domain (ENCOR weight) | Coverage |
 |---|---|
 | **Architecture (15%)** | **2 topics** — hierarchical campus design (access/distribution/core, network blocks, HA/SSO/NSF), and fabric: SD-Access (LISP/VXLAN/TrustSec, DNA Center layers) + SD-WAN (vManage/vSmart/vBond, OMP, AAR, Cloud OnRamp) |
-| **Virtualization (10%)** | Overlay Tunnels — GRE, IPsec (IKEv1/IKEv2), VTI, LISP, VXLAN |
+| **Virtualization (10%)** | **2 topics** — overlay tunnels (GRE, IPsec IKEv1/IKEv2, VTI, LISP, VXLAN), and virtualization: VMs/containers/vSwitches, the ETSI NFV framework, VNF I/O (OVS-DPDK, PCI passthrough, SR-IOV), Cisco ENFV/NFVIS |
 | **Infrastructure (30%)** | **22 topics** — L2/L3 forwarding, STP/RSTP/MST + protection, EtherChannel, IP routing, EIGRP, OSPF (multi-area + OSPFv3), BGP (+ advanced), multicast, QoS, IP services (NTP/PTP/FHRP/NAT), and the full wireless block: RF & modulation, infrastructure/CAPWAP, roaming & location services, troubleshooting |
-| **Network Assurance (10%)** | **Covered** — ping/traceroute/debug discipline, SNMP (MIBs, OIDs, traps), syslog, NetFlow & Flexible NetFlow, SPAN/RSPAN/ERSPAN, IP SLA, Catalyst Center Assurance |
-| Security (20%) | **1 topic** — wireless client authentication (WPA3/SAE, EAP & 802.1x, the four-way handshake, WebAuth). Next up: ACLs, first-hop security, AAA |
-| Automation (15%) | not started |
+| **Network Assurance (10%)** | **1 topic** — ping/traceroute/debug discipline, SNMP (MIBs, OIDs, traps), syslog, NetFlow & Flexible NetFlow, SPAN/RSPAN/ERSPAN, IP SLA, Catalyst Center Assurance |
+| **Security (20%)** | **3 topics** — wireless client authentication (WPA3/SAE, EAP & 802.1x, four-way handshake, WebAuth); secure network access control (Cisco SAFE, the Secure portfolio, 802.1x/MAB/WebAuth, TrustSec, MACsec); device access control & infrastructure security (privilege levels, AAA/TACACS+, ZBFW, CoPP, hardening) |
+| **Automation (15%)** | **2 topics** — network programmability (REST APIs, JSON/XML, DNA Center & vManage APIs, YANG/NETCONF/RESTCONF, Python) and automation tools (EEM + Tcl, Puppet, Chef, SaltStack, Ansible, Puppet Bolt, Salt SSH) |
+
+Two blueprint topics — DHCP and first-hop security — have no standalone OCG chapter, so
+the roadmap says that plainly instead of leaving them as permanently open checkboxes.
+
+### ENARSI 300-410 — just started
+
+Same template, second catalog, in the same repo. ENARSI revisits several protocols ENCOR
+already covers — EIGRP, OSPF, BGP, ACLs, CoPP, AAA, SNMP, NetFlow, IP SLA,
+NETCONF/RESTCONF — at greater depth and with a troubleshooting rather than an
+implementation slant. Where that happens the ENARSI skill captures **the delta** and
+cross-references the ENCOR skill, rather than duplicating it.
+
+The generator enforces that: `/enarsi-note` reads `/ccnp-note`'s template by reference
+instead of copying it, so the two catalogs can't drift apart, and it checks for an
+existing ENCOR skill on the same protocol before writing a new one.
 
 ---
 
@@ -98,7 +121,7 @@ progress or planned. Posted so you can watch it take shape, not as a finished pr
 | Stage | Project | Status |
 |---|---|---|
 | 1. Detect drift | **[netmiko-config-audit](https://github.com/stefcharreed/netmiko-config-audit)** — pulls running-configs over SSH, tracks per-device drift in git, exposes it over MCP with human-gated baseline promotion | **Shipped — validated against physical Cisco gear** |
-| 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — see above | active |
+| 2. Knowledge base | [ccnp-encor-skills](https://github.com/stefcharreed/ccnp-encor-skills) — see above | **ENCOR complete; ENARSI active** |
 | 3. Observe behavior | [network-observability](https://github.com/stefcharreed/network-observability) — Prometheus/Grafana/Alertmanager/snmp_exporter as code, with drift surfaced as its own dashboard panel and alert | Dockerized and CI-validated; live SNMP validation next |
 | 4. Capture logs | Syslog event pipeline | not started |
 | 5. Diagnose it | The troubleshooting agent above | private — [ask me](https://www.linkedin.com/in/stefan-c-reed/) |
@@ -116,4 +139,6 @@ the lab trainer above is what happens when you point that same knowledge base ba
 yourself and let it grade you.
 
 A rule I hold everything to: **fixture-tested and gear-validated are not the same
-claim.** Every repo says which one it is.
+claim.** Every repo says which one it is. The skill catalog holds itself to the same
+line — each one states whether its config came from the source material or was written
+to fill a gap, and whether it's been run on real gear.
