@@ -138,6 +138,12 @@ that consume those references. `ccnp-encor-skills` is the clearest public exampl
 the lab trainer above is what happens when you point that same knowledge base back at
 yourself and let it grade you.
 
+**[stef-claude-skills](https://github.com/stefcharreed/stef-claude-skills)** — two
+Claude Code plugins:
+
+- **bias-council** — a blind panel of subagents pressure-tests a decision or plan
+- **repo-scan** — scores Claude Code repos with security gates before you install one
+
 A rule I hold everything to: **fixture-tested and gear-validated are not the same
 claim.** Every repo says which one it is. The skill catalog holds itself to the same
 line — each one states whether its config came from the source material or was written
