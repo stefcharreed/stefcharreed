@@ -6,8 +6,9 @@ configs — and lately, tooling that turns what I'm studying into something a ma
 can actually use.
 
 Current focus: a CCNP knowledge base built as structured, queryable skill files —
-**ENCOR is complete and ENARSI is underway** — plus two private tools built on top of
-it. Working direction is firewall and security operations.
+**ENCOR is complete and ENARSI is underway** — plus tools built on top of it: one
+public incident-practice generator and two private projects. Working direction is
+firewall and security operations.
 
 [LinkedIn](https://www.linkedin.com/in/stefan-c-reed/)
 
@@ -66,6 +67,36 @@ cross-references the ENCOR skill, rather than duplicating it.
 The generator enforces that: `/enarsi-note` reads `/ccnp-note`'s template by reference
 instead of copying it, so the two catalogs can't drift apart, and it checks for an
 existing ENCOR skill on the same protocol before writing a new one.
+
+---
+
+## Incident practice packets — generated, validated, graded
+
+**[netops-ticket-generator](https://github.com/stefcharreed/netops-ticket-generator)**
+builds the kind of packet a troubleshooting practical hands you: a syslog spreadsheet,
+telemetry graphs, config diffs and a vague end-user ticket. Every packet has a hidden,
+validated answer key. You write your diagnosis, then it grades you against that key.
+
+- **The model writes the scenario; code decides whether it ships.** A Claude Code skill
+  writes each incident as a labeled record: root cause, symptom, unrelated or noise,
+  with causal links. Python then checks it against a registry of real vendor log
+  formats and against cross-file consistency rules. The registry has **275 entries, 210
+  of them verified** against vendor docs, upstream source or parser fixtures, each with
+  a source URL. Nothing renders unless every check passes.
+- **The ticket may mislead, but it may not lie.** Every planted claim must be true of
+  the scenario, just pointed the wrong way, in one of five named ways: misattribution,
+  scope, coincidence, omission or stale. That's how real users report problems. The
+  checks reject a ticket that names devices or interfaces a non-technical user wouldn't
+  know, quotes CLI output, or gives the root cause away.
+- **The answer key never reaches the screen.** Packets are generated in a subagent, so
+  the key goes straight to disk. It isn't opened until you've submitted a diagnosis.
+- **11 fault patterns, tagged by cert and topic:** STP, trunking, ACLs, OSPF, EIGRP,
+  eBGP, HSRP, port security, native VLAN, NTP and RADIUS. Ask for "ENCOR only" or "just
+  OSPF" and the draw follows.
+
+Status: fixture-tested (145 tests, CI on Python 3.10 and 3.13), and live packets have
+been built and leak-checked. **Not gear-validated**, and no packet has been graded
+against a real attempt yet.
 
 ---
 
@@ -136,7 +167,9 @@ I use Claude Code as part of how I study and build — turning raw notes and lab
 into structured, reusable references instead of one-off documents, then building tools
 that consume those references. `ccnp-encor-skills` is the clearest public example, and
 the lab trainer above is what happens when you point that same knowledge base back at
-yourself and let it grade you.
+yourself and let it grade you. `netops-ticket-generator` is the public version of the
+same idea: the model drafts the incident, and deterministic checks decide whether it
+can be trusted.
 
 **[stef-claude-skills](https://github.com/stefcharreed/stef-claude-skills)** — two
 Claude Code plugins:
